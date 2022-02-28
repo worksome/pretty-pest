@@ -5,21 +5,9 @@ declare(strict_types=1);
 namespace Worksome\PrettyPest\PestSniff\Sniffs\Formatting;
 
 use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Sniffs\Sniff;
 
-final class NewLineAfterTestSniff implements Sniff
+final class NewLineAfterTestSniff extends PestTestSniff
 {
-    /**
-     * An array of function names that should be classed as functions that will
-     * add a Test to the TestSuite.
-     * 
-     * @var array<int, string> 
-     */
-    public array $testFunctions = [
-        'test',
-        'it',
-    ];
-    
     public function register(): array
     {
         return [T_STRING];
@@ -53,16 +41,5 @@ final class NewLineAfterTestSniff implements Sniff
         }
 
         $phpcsFile->fixer->addNewline($endOfTestFunction);
-    }
-
-    private function stringIsTestFunction(string $value): bool
-    {
-        foreach ($this->testFunctions as $testFunction) {
-            if (str_starts_with($value, $testFunction)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
