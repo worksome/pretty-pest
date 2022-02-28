@@ -33,6 +33,12 @@ final class CodeSnifferResult
                 $this->assertHasError($line);
             }
 
+            Assert::assertCount(
+                count($this->result->getErrors()),
+                $errors,
+                'There were more errors that you specified.',
+            );
+
             return $this;
         }
 

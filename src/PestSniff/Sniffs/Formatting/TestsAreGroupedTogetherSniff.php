@@ -17,6 +17,7 @@ final class TestsAreGroupedTogetherSniff extends PestTestSniff
     {
         $functionCalls = $this->getRootFunctionCalls($phpcsFile);
         $nextFunctionCallShouldBeTest = false;
+        $shouldFix = false;
 
         foreach ($functionCalls as $index => $details) {
             if ($this->stringIsTestFunction($details['functionName'])) {
@@ -28,11 +29,12 @@ final class TestsAreGroupedTogetherSniff extends PestTestSniff
                 continue;
             }
 
-            if ($index === count($functionCalls) - 1) {
+
+            if (! $this->thereAreMoreTestFunctions($functionCalls, $index)) {
                 continue;
             }
 
-            $phpcsFile->addFixableError(
+            $shouldFix = $phpcsFile->addFixableError(
                 'Test functions should be grouped together',
                 $functionCalls[$index + 1]['stackPtr'],
                 self::class,
@@ -40,5 +42,27 @@ final class TestsAreGroupedTogetherSniff extends PestTestSniff
 
             $nextFunctionCallShouldBeTest = false;
         }
+
+        if (! $shouldFix) {
+            return;
+        }
+
+        $this->reorderTests($phpcsFile, $functionCalls);
+    }
+
+    private function reorderTests(File $phpcsFile, array $functionCalls): void
+    {
+
+//        $phpcsFile->fixer->replaceToken()
+    }
+
+    private function thereAreMoreTestFunctions(array $functionCalls, int $currentIndex): bool
+    {
+        $remainingTestFunctions = array_filter(
+            array_slice($functionCalls, $currentIndex + 1),
+            fn ($detail) => $this->stringIsTestFunction($detail['functionName'])
+        );
+
+        return count($remainingTestFunctions) > 0;
     }
 }
