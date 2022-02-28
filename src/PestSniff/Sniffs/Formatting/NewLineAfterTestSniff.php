@@ -7,7 +7,7 @@ namespace Worksome\PrettyPest\PestSniff\Sniffs\Formatting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 
-final class PestStructureSniff implements Sniff
+final class NewLineAfterTestSniff implements Sniff
 {
     /**
      * An array of function names that should be classed as functions that will
