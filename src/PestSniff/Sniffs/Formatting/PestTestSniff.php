@@ -39,7 +39,9 @@ abstract class PestTestSniff implements Sniff
 
         while ($currentFunctionLocation !== false) {
             $rootFunctionCalls[] = [
-                'stackPtr' => $currentFunctionLocation,
+                'startPtr' => $currentFunctionLocation,
+                // + 1 includes the semicolon at the end of the function call.
+                'endPtr' => $phpcsFile->findEndOfStatement($currentFunctionLocation) + 1,
                 'functionName' => $phpcsFile->getTokensAsString($currentFunctionLocation, 1),
             ];
             $stackPtr = $phpcsFile->findEndOfStatement($currentFunctionLocation);
@@ -47,5 +49,28 @@ abstract class PestTestSniff implements Sniff
         }
 
         return $rootFunctionCalls;
+    }
+
+    protected function getTestFunctionCalls(File $phpcsFile): array
+    {
+        return array_values(array_filter(
+            $this->getRootFunctionCalls($phpcsFile),
+            fn ($details) => $this->stringIsTestFunction($details['functionName']),
+        ));
+    }
+
+    protected function getFunctionAsString(File $phpcsFile, $stackPtr): string
+    {
+        return $phpcsFile->getTokensAsString($stackPtr, $phpcsFile->findEndOfStatement($stackPtr) - $stackPtr + 1);
+    }
+
+    protected function deleteFunction(File $phpcsFile, $stackPtr): void
+    {
+        // + 1 will include the semicolon at the end of the function.
+        $endOfFunctionPtr = $phpcsFile->findEndOfStatement($stackPtr) + 1;
+
+        foreach (range($stackPtr, $endOfFunctionPtr) as $ptrToRemove) {
+            $phpcsFile->fixer->replaceToken($ptrToRemove, '');
+        }
     }
 }

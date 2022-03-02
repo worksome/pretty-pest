@@ -18,6 +18,11 @@ it('boom', function () {
 
 var_dump('foo');
 
+
+
 dataset('foo', ['bar', 'baz', 'boom']);
+
+
+var_dump('foo');
 
 var_dump('foo');
