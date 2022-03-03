@@ -24,4 +24,8 @@ it('can fix grouping functions together', function (string $original, string $fi
         __DIR__ . '/../../Stubs/Formatting/PestStructureSniff/datasets_not_grouped_together.php',
         __DIR__ . '/../../Stubs/Formatting/PestStructureSniff/Fixed/datasets_not_grouped_together.php',
     ],
+    'tests and datasets' => [
+        __DIR__ . '/../../Stubs/Formatting/PestStructureSniff/tests_and_datasets_not_grouped_together.php',
+        __DIR__ . '/../../Stubs/Formatting/PestStructureSniff/Fixed/tests_and_datasets_not_grouped_together.php',
+    ],
 ]);
