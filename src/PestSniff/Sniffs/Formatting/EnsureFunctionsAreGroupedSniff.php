@@ -9,7 +9,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use Worksome\PrettyPest\Support\Fixers\PhpCs;
 use Worksome\PrettyPest\Support\GroupingManager;
 
-final class GroupFunctionsSniff implements Sniff
+final class EnsureFunctionsAreGroupedSniff implements Sniff
 {
     public function register(): array
     {
