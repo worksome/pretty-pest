@@ -20,10 +20,14 @@ abstract class PestTestSniff implements Sniff
         'it',
     ];
 
-    protected function stringIsTestFunction(string $value): bool
+    /**
+     * Check whether the given string is actually one of the Pest PHP
+     * test function names: "test" or "it".
+     */
+    protected function isTestFunction(string $functionName): bool
     {
         foreach ($this->testFunctions as $testFunction) {
-            if (str_starts_with($value, $testFunction)) {
+            if ($functionName === $testFunction) {
                 return true;
             }
         }
@@ -55,7 +59,7 @@ abstract class PestTestSniff implements Sniff
     {
         return array_values(array_filter(
             $this->getRootFunctionCalls($phpcsFile),
-            fn ($details) => $this->stringIsTestFunction($details['functionName']),
+            fn ($details) => $this->isTestFunction($details['functionName']),
         ));
     }
 

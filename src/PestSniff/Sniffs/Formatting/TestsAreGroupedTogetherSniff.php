@@ -24,7 +24,7 @@ final class TestsAreGroupedTogetherSniff extends PestTestSniff
              * If the function is a test, we must make sure that the next function call
              * after it is also a test, so we'll enable that and go to the next call.
              */
-            if ($this->stringIsTestFunction($details['functionName'])) {
+            if ($this->isTestFunction($details['functionName'])) {
                 $nextFunctionCallShouldBeTest = true;
                 continue;
             }
@@ -90,7 +90,7 @@ final class TestsAreGroupedTogetherSniff extends PestTestSniff
     {
         $remainingTestFunctions = array_filter(
             array_slice($functionCalls, $currentIndex + 1),
-            fn ($detail) => $this->stringIsTestFunction($detail['functionName'])
+            fn ($detail) => $this->isTestFunction($detail['functionName'])
         );
 
         return count($remainingTestFunctions) > 0;

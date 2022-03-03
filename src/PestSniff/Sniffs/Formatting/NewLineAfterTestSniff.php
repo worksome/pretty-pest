@@ -17,7 +17,7 @@ final class NewLineAfterTestSniff extends PestTestSniff
     {
         $stringValue = $phpcsFile->getTokensAsString($stackPtr, 1);
 
-        if (! $this->stringIsTestFunction($stringValue)) {
+        if (! $this->isTestFunction($stringValue)) {
             return;
         }
 
