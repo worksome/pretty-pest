@@ -42,7 +42,11 @@ final class CodeSnifferResult
             return $this;
         }
 
-        Assert::assertCount($errors, $this->result->getErrors());
+        Assert::assertCount(
+            $errors,
+            $this->result->getErrors(),
+            'There were more errors that you specified.',
+        );
 
         return $this;
     }
@@ -51,7 +55,12 @@ final class CodeSnifferResult
     {
         $errors = $this->result->getErrors();
 
-        Assert::assertTrue(key_exists($line, $errors), sprintf('Expected error on line %s, but none found.', $line));
+        Assert::assertTrue(key_exists($line, $errors), sprintf(
+            'Expected error on line %s, but none found. %sErrors were found on lines %s.',
+            $line,
+            PHP_EOL . PHP_EOL,
+            implode(', ', array_keys($errors)),
+        ));
 
         $sniffCode = sprintf('%s.%s', $this->sniffClass->asReference(), $this->sniffClass->asFQCN());
 

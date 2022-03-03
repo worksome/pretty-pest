@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Worksome\PrettyPest\PestSniff\Sniffs\Formatting;
 
 use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
+use Worksome\PrettyPest\Support\Fixers\PhpCs;
 
-final class NewLineAfterTestSniff extends PestTestSniff
+final class NewLineAfterTestSniff implements Sniff
 {
     public function register(): array
     {
@@ -15,31 +17,27 @@ final class NewLineAfterTestSniff extends PestTestSniff
 
     public function process(File $phpcsFile, $stackPtr): void
     {
-        $stringValue = $phpcsFile->getTokensAsString($stackPtr, 1);
+        $fixer = new PhpCs($this, $phpcsFile);
+        $test = $fixer->buildFunctionDetail($stackPtr);
 
-        if (! $this->isTestFunction($stringValue)) {
+        if (! $test->isTest()) {
             return;
         }
-
-        $endOfTestFunction = $phpcsFile->findEndOfStatement($stackPtr);
 
         /**
-         * Let's now check to see if there is a new line after the test function.
+         * Let's now check to see if there is a new line after the test function's ";".
          */
-        if (preg_match('/^;\s?\n$/', $phpcsFile->getTokensAsString($endOfTestFunction, 3)) === 1) {
+        if (preg_match('/^;\s?\n$/', $phpcsFile->getTokensAsString($test->getEndPtr() - 1, 3)) === 1) {
             return;
         }
 
-        $fix = $phpcsFile->addFixableError(
+        $shouldFix = $fixer->addError(
+            $test->getEndPtr(),
             'Pest test functions must be separated by a new line.',
-            $endOfTestFunction,
-            self::class,
         );
 
-        if ($fix === false) {
-            return;
+        if ($shouldFix) {
+            $phpcsFile->fixer->addNewline($test->getEndPtr());
         }
-
-        $phpcsFile->fixer->addNewline($endOfTestFunction);
     }
 }
