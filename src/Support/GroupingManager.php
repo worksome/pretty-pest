@@ -77,7 +77,7 @@ final class GroupingManager
             $this->fixer->deleteFunction($functionDetail);
         }
 
-        $this->fixer->insertContent(implode(PHP_EOL . PHP_EOL, $groupContents), $relevantFunctions[0]);
+        $this->fixer->insertContent(implode(PHP_EOL . PHP_EOL, $groupContents), $relevantFunctions[0]->getEndPtr());
     }
 
 }

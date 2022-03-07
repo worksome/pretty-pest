@@ -18,7 +18,11 @@ final class NewLineAfterTestSniff implements Sniff
     public function process(File $phpcsFile, $stackPtr): void
     {
         $fixer = new PhpCs($this, $phpcsFile);
-        $test = $fixer->buildFunctionDetail($stackPtr);
+        $test = $fixer->getFunction($stackPtr);
+
+        if ($test === null) {
+            return;
+        }
 
         if (! $test->isTest()) {
             return;

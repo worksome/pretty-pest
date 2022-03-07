@@ -13,11 +13,11 @@ interface Fixer
      */
     public function getFunctions(): array;
 
-    public function buildFunctionDetail(int $ptr): FunctionDetail;
+    public function getFunction(int $ptr): FunctionDetail|null;
 
     public function addError(int $ptr, string $message): bool;
 
     public function deleteFunction(FunctionDetail $functionDetail): void;
 
-    public function insertContent(string $content, FunctionDetail $startingPoint): void;
+    public function insertContent(string $content, int $ptr): void;
 }

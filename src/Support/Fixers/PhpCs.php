@@ -22,7 +22,12 @@ final class PhpCs implements Fixer
         $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr);
 
         while ($currentFunctionLocation !== false) {
-            $calls[] = $this->buildFunctionDetail($currentFunctionLocation);
+            $function = $this->getFunction($currentFunctionLocation);
+
+            if ($function !== null) {
+                $calls[] = $function;
+            }
+
             $stackPtr = $this->phpcsFile->findEndOfStatement($currentFunctionLocation);
             $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr);
         }
@@ -30,8 +35,12 @@ final class PhpCs implements Fixer
         return $calls;
     }
 
-    public function buildFunctionDetail(int $ptr): FunctionDetail
+    public function getFunction(int $ptr): FunctionDetail|null
     {
+        if (! str_contains($this->phpcsFile->getTokensAsString($ptr, 2), '(')) {
+            return null;
+        }
+
         $endOfFunctionPtr = $this->phpcsFile->findEndOfStatement($ptr) + 1;
 
         return new FunctionDetail(
@@ -58,11 +67,8 @@ final class PhpCs implements Fixer
         $this->phpcsFile->fixer->endChangeset();
     }
 
-    public function insertContent(string $content, FunctionDetail $startingPoint): void
+    public function insertContent(string $content, int $ptr): void
     {
-        $this->phpcsFile->fixer->addContent(
-            $startingPoint->getEndPtr(),
-            PHP_EOL . $content . PHP_EOL
-        );
+        $this->phpcsFile->fixer->addContent($ptr, PHP_EOL . $content . PHP_EOL);
     }
 }
