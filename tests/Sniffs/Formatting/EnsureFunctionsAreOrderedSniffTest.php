@@ -43,3 +43,8 @@ it('can provide a custom sort order', function () {
         ]
     )->assertMatchesFile(__DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/Fixed/dataset_out_of_order_with_custom_sort_order.php');
 });
+
+it('does not crash', function () {
+    checkFile(__DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/discovered_recursive_error.php')
+        ->assertHasNoErrors();
+});

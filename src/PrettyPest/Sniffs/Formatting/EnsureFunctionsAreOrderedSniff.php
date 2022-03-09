@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Worksome\PrettyPest\PestSniff\Sniffs\Formatting;
+namespace Worksome\PrettyPest\PrettyPest\Sniffs\Formatting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;

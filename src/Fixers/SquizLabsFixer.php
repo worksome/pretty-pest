@@ -30,7 +30,7 @@ final class SquizLabsFixer implements Fixer
             }
 
             $stackPtr = $this->phpcsFile->findEndOfStatement($currentFunctionLocation);
-            $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr);
+            $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr + 1);
         }
 
         return $calls;

@@ -25,7 +25,7 @@ final class SniffFormatter
 
         $relevantClassName = substr($testCase::class, strpos($testCase::class, '\\Sniffs\\') + 1);
 
-        return new self("Worksome\\PrettyPest\\PestSniff\\" . substr($relevantClassName, 0, strlen($relevantClassName) - 4));
+        return new self("Worksome\\PrettyPest\\PrettyPest\\" . substr($relevantClassName, 0, strlen($relevantClassName) - 4));
     }
 
     public function asFQCN(): string

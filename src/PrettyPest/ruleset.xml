@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<ruleset name="PrettyPest">
+    <description>Opinionated formatting rules for Pest PHP.</description>
+</ruleset>
