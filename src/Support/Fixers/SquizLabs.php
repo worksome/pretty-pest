@@ -9,7 +9,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use Worksome\PrettyPest\Contracts\Fixer;
 use Worksome\PrettyPest\Support\FunctionDetail;
 
-final class PhpCs implements Fixer
+final class SquizLabs implements Fixer
 {
     public function __construct(private Sniff $sniff, private File $phpcsFile)
     {
@@ -58,17 +58,19 @@ final class PhpCs implements Fixer
 
     public function deleteFunction(FunctionDetail $functionDetail): void
     {
-        $this->phpcsFile->fixer->beginChangeset();
+        $endPtr = $this->phpcsFile->findNext([T_WHITESPACE], $functionDetail->getEndPtr(), exclude: true);
 
-        foreach (range($functionDetail->getStartPtr(), $functionDetail->getEndPtr() - 1) as $ptrToRemove) {
+        if ($endPtr === false) {
+            $endPtr = $functionDetail->getEndPtr();
+        }
+        
+        foreach (range($functionDetail->getStartPtr(), $endPtr) as $ptrToRemove) {
             $this->phpcsFile->fixer->replaceToken($ptrToRemove, '');
         }
-
-        $this->phpcsFile->fixer->endChangeset();
     }
 
     public function insertContent(string $content, int $ptr): void
     {
-        $this->phpcsFile->fixer->addContent($ptr, PHP_EOL . $content . PHP_EOL);
+        $this->phpcsFile->fixer->addContent($ptr, $content);
     }
 }

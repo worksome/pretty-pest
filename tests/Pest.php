@@ -7,12 +7,12 @@ use Worksome\PrettyPest\Tests\Support\CodeSnifferResult;
 
 uses(SniffTestCase::class)->in('Sniffs');
 
-function checkFile(string $filePath): CodeSnifferResult
+function checkFile(string $filePath, array $properties = []): CodeSnifferResult
 {
-    return test()->checkFile($filePath);
+    return test()->checkFile($filePath, $properties);
 }
 
-function fixFile(string $filePath): CodeSnifferResult
+function fixFile(string $filePath, array $properties = []): CodeSnifferResult
 {
-    return test()->fixFile($filePath);
+    return test()->fixFile($filePath, $properties);
 }

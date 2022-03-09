@@ -4,6 +4,8 @@ use PHPUnit\Framework\TestCase;
 
 uses(TestCase::class);
 
+dataset('foo', []);
+
 test('something', function () {
     expect(true)->toBeTrue();
 });
@@ -11,5 +13,3 @@ test('something', function () {
 it('works as advertised', function () {
     expect(true)->toBeTrue();
 });
-
-dataset('foo', []);

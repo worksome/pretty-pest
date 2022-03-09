@@ -6,7 +6,7 @@ namespace Worksome\PrettyPest\PestSniff\Sniffs\Formatting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use Worksome\PrettyPest\Support\Fixers\PhpCs;
+use Worksome\PrettyPest\Support\Fixers\SquizLabs;
 
 final class NewLineAfterTestSniff implements Sniff
 {
@@ -17,7 +17,7 @@ final class NewLineAfterTestSniff implements Sniff
 
     public function process(File $phpcsFile, $stackPtr): void
     {
-        $fixer = new PhpCs($this, $phpcsFile);
+        $fixer = new SquizLabs($this, $phpcsFile);
         $test = $fixer->getFunction($stackPtr);
 
         if ($test === null) {
