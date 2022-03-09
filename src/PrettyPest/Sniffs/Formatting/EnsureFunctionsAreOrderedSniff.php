@@ -13,6 +13,10 @@ final class EnsureFunctionsAreOrderedSniff implements Sniff
 {
     public array $order = [
         'uses',
+        'beforeAll',
+        'beforeEach',
+        'afterEach',
+        'afterAll',
         ['test', 'it'],
         'dataset',
     ];

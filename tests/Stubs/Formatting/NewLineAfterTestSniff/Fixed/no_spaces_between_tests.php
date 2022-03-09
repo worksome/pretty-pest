@@ -17,6 +17,10 @@ it('boom', function () {
     expect(true)->toBeTrue();
 });
 
+function foo(): bool
+{
+    return false;
+}
 var_dump('foo');
 
 var_dump('bar');

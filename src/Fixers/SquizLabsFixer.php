@@ -29,7 +29,7 @@ final class SquizLabsFixer implements Fixer
                 $calls[] = $function;
             }
 
-            $stackPtr = $this->phpcsFile->findEndOfStatement($currentFunctionLocation);
+            $stackPtr = $function === null ? $stackPtr + 1 : $this->phpcsFile->findEndOfStatement($currentFunctionLocation);
             $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr + 1);
         }
 
@@ -39,6 +39,10 @@ final class SquizLabsFixer implements Fixer
     private function getFunction(int $ptr): FunctionDetail|null
     {
         if (! str_contains($this->phpcsFile->getTokensAsString($ptr, 2), '(')) {
+            return null;
+        }
+
+        if ($this->phpcsFile->findPrevious([T_FUNCTION], $ptr) === $ptr - 2) {
             return null;
         }
 
