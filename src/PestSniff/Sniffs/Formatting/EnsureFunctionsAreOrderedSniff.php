@@ -24,7 +24,7 @@ final class EnsureFunctionsAreOrderedSniff implements Sniff
         return [T_OPEN_TAG];
     }
 
-    public function process(File $phpcsFile, $stackPtr)
+    public function process(File $phpcsFile, $stackPtr): void
     {
         (new OrderFunctions(new SquizLabs($this, $phpcsFile), $this->order))();
     }
