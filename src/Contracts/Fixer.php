@@ -16,11 +16,6 @@ interface Fixer
     public function getFunctionCalls(): array;
 
     /**
-     * Get the function call at the given token pointer in the file.
-     */
-    public function getFunction(int $ptr): FunctionDetail|null;
-
-    /**
      * Add an error with the provided message. Returning true
      * indicates that the error can be fixed automatically.
      */

@@ -36,7 +36,7 @@ final class SquizLabsFixer implements Fixer
         return $calls;
     }
 
-    public function getFunction(int $ptr): FunctionDetail|null
+    private function getFunction(int $ptr): FunctionDetail|null
     {
         if (! str_contains($this->phpcsFile->getTokensAsString($ptr, 2), '(')) {
             return null;
