@@ -6,6 +6,7 @@ it('foo', function () {
 test('bar', function () {
     expect(true)->toBeTrue();
 });
+// Foo bar baz
 it('baz', function () {
     expect(true)->toBeTrue();
 });

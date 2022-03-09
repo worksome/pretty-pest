@@ -7,16 +7,14 @@ namespace Worksome\PrettyPest\PestSniff\Sniffs\Formatting;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use Worksome\PrettyPest\Actions\OrderFunctions;
-use Worksome\PrettyPest\Contracts\Fixer;
-use Worksome\PrettyPest\Support\Fixers\SquizLabsFixer;
-use Worksome\PrettyPest\Support\FunctionDetail;
+use Worksome\PrettyPest\Fixers\SquizLabsFixer;
 
 final class EnsureFunctionsAreOrderedSniff implements Sniff
 {
     public array $order = [
-        ['uses'],
+        'uses',
         ['test', 'it'],
-        ['dataset'],
+        'dataset',
     ];
 
     public function register(): array

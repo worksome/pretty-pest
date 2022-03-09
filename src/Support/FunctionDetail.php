@@ -13,20 +13,9 @@ final class FunctionDetail
         private int $startPtr,
         private int $endPtr,
         private string $contents,
+        private WhitespaceDetail|null $whitespaceAfterFunction,
     )
     {
-    }
-
-    public static function make(File $phpcsFile, int $stackPtr): self
-    {
-        $endOfFunctionPtr = $phpcsFile->findEndOfStatement($stackPtr) + 1;
-
-        return new self(
-            $phpcsFile->getTokensAsString($stackPtr, 1),
-            $stackPtr,
-            $endOfFunctionPtr,
-            $phpcsFile->getTokensAsString($stackPtr, $endOfFunctionPtr - $stackPtr),
-        );
     }
 
     public function getName(): string
@@ -57,6 +46,11 @@ final class FunctionDetail
     public function getContents(): string
     {
         return $this->contents;
+    }
+
+    public function getWhitespaceAfterFunction(): WhitespaceDetail|null
+    {
+        return $this->whitespaceAfterFunction;
     }
 
 }

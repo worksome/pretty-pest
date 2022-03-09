@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Worksome\PrettyPest\Support\Fixers;
+namespace Worksome\PrettyPest\Fixers;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use Worksome\PrettyPest\Contracts\Fixer;
 use Worksome\PrettyPest\Support\FunctionDetail;
+use Worksome\PrettyPest\Support\WhitespaceDetail;
 
 final class SquizLabsFixer implements Fixer
 {
@@ -15,7 +16,7 @@ final class SquizLabsFixer implements Fixer
     {
     }
 
-    public function getFunctions(): array
+    public function getFunctionCalls(): array
     {
         $calls = [];
         $stackPtr = 0;
@@ -43,11 +44,18 @@ final class SquizLabsFixer implements Fixer
 
         $endOfFunctionPtr = $this->phpcsFile->findEndOfStatement($ptr) + 1;
 
+        $nextTokenThatIsNotWhitespace = $this->phpcsFile->findNext([T_WHITESPACE], $endOfFunctionPtr, exclude: true);
+        $whitespaceDetail = match($nextTokenThatIsNotWhitespace) {
+            false => null,
+            default => new WhitespaceDetail($endOfFunctionPtr, $nextTokenThatIsNotWhitespace - 1),
+        };
+
         return new FunctionDetail(
             $this->phpcsFile->getTokensAsString($ptr, 1),
             $ptr,
             $endOfFunctionPtr,
             $this->phpcsFile->getTokensAsString($ptr, $endOfFunctionPtr - $ptr),
+            $whitespaceDetail,
         );
     }
 
@@ -65,6 +73,19 @@ final class SquizLabsFixer implements Fixer
         }
         
         foreach (range($functionDetail->getStartPtr(), $endPtr) as $ptrToRemove) {
+            $this->phpcsFile->fixer->replaceToken($ptrToRemove, '');
+        }
+    }
+
+    public function deleteFunctionWhitespace(FunctionDetail $functionDetail): void
+    {
+        $whitespaceDetail = $functionDetail->getWhitespaceAfterFunction();
+
+        if ($whitespaceDetail === null) {
+            return;
+        }
+
+        foreach (range($whitespaceDetail->getStartPtr(), $whitespaceDetail->getEndPtr()) as $ptrToRemove) {
             $this->phpcsFile->fixer->replaceToken($ptrToRemove, '');
         }
     }

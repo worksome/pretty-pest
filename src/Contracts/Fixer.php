@@ -13,7 +13,7 @@ interface Fixer
      *
      * @return array<int, FunctionDetail>
      */
-    public function getFunctions(): array;
+    public function getFunctionCalls(): array;
 
     /**
      * Get the function call at the given token pointer in the file.
@@ -30,6 +30,11 @@ interface Fixer
      * Remove the given function call from the file.
      */
     public function deleteFunction(FunctionDetail $functionDetail): void;
+
+    /**
+     * Delete the given whitespace after a function call.
+     */
+    public function deleteFunctionWhitespace(FunctionDetail $functionDetail): void;
 
     /**
      * Insert the given function call into the file at the specified token pointer.

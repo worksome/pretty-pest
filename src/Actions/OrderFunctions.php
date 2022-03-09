@@ -10,7 +10,7 @@ use Worksome\PrettyPest\Support\FunctionDetail;
 final class OrderFunctions
 {
     /**
-     * @param array<int, array<int, string>> $functionOrder
+     * @param array<int, string|array<int, string>> $functionOrder
      */
     public function __construct(private Fixer $fixer, private array $functionOrder)
     {
@@ -18,7 +18,7 @@ final class OrderFunctions
 
     public function __invoke(): void
     {
-        $functions = $this->fixer->getFunctions();
+        $functions = $this->fixer->getFunctionCalls();
         $sortedFunctions = $this->sortFunctions($functions);
 
         if (count($functions) === 0) {
@@ -64,7 +64,7 @@ final class OrderFunctions
     private function getFunctionPriority(FunctionDetail $functionDetail): int
     {
         // We'll flip the order array so that the indexes correctly represent priority.
-        $order = array_reverse($this->functionOrder);
+        $order = array_reverse($this->getFunctionOrder());
 
         // By default, we use a low priority so that any unspecified function is placed at the bottom of the file.
         $priority = 0;
@@ -77,6 +77,14 @@ final class OrderFunctions
         }
 
         return $priority;
+    }
+
+    /**
+     * @return array<int, array<int, string>>
+     */
+    private function getFunctionOrder(): array
+    {
+        return array_map(fn (string|array $order) => (array) $order, $this->functionOrder);
     }
 
 }
