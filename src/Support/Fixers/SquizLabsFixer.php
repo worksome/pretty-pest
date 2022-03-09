@@ -9,7 +9,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use Worksome\PrettyPest\Contracts\Fixer;
 use Worksome\PrettyPest\Support\FunctionDetail;
 
-final class SquizLabs implements Fixer
+final class SquizLabsFixer implements Fixer
 {
     public function __construct(private Sniff $sniff, private File $phpcsFile)
     {

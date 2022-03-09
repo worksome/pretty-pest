@@ -8,7 +8,7 @@ use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use Worksome\PrettyPest\Actions\OrderFunctions;
 use Worksome\PrettyPest\Contracts\Fixer;
-use Worksome\PrettyPest\Support\Fixers\SquizLabs;
+use Worksome\PrettyPest\Support\Fixers\SquizLabsFixer;
 use Worksome\PrettyPest\Support\FunctionDetail;
 
 final class EnsureFunctionsAreOrderedSniff implements Sniff
@@ -26,6 +26,6 @@ final class EnsureFunctionsAreOrderedSniff implements Sniff
 
     public function process(File $phpcsFile, $stackPtr): void
     {
-        (new OrderFunctions(new SquizLabs($this, $phpcsFile), $this->order))();
+        (new OrderFunctions(new SquizLabsFixer($this, $phpcsFile), $this->order))();
     }
 }
