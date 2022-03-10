@@ -18,7 +18,7 @@ final class OrderFunctions
 
     public function __invoke(): void
     {
-        $functions = $this->fixer->getFunctionCalls();
+        $functions = $this->fixer->getTopLevelFunctionCalls();
         $sortedFunctions = $this->sortFunctions($functions);
 
         if (count($functions) === 0) {
@@ -48,7 +48,7 @@ final class OrderFunctions
             array_map(fn(FunctionDetail $detail) => $detail->getContents(), $sortedFunctions),
         );
 
-        $this->fixer->insertContent($sortedFunctionContents, $functions[0]->getStartPtr() - 1);
+        $this->fixer->insertContent($sortedFunctionContents . PHP_EOL . PHP_EOL, $functions[0]->getStartPtr() - 1);
     }
 
     private function sortFunctions(array $functions): array

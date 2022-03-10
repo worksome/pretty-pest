@@ -16,14 +16,18 @@ it('creates an error on the first line when functions are not sorted', function 
 it('can sort the function groups', function (string $filePath, string $fixedFile) {
     fixFile($filePath)->assertMatchesFile($fixedFile);
 })->with([
-//    'uses not first' => [
-//        __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/uses_not_first.php',
-//        __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/Fixed/uses_not_first.php',
-//    ],
+    'uses not first' => [
+        __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/uses_not_first.php',
+        __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/Fixed/uses_not_first.php',
+    ],
     'dataset out of order' => [
         __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/dataset_out_of_order.php',
         __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/Fixed/dataset_out_of_order.php',
     ],
+    'dataset with yields' => [
+        __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/file_where_first_function_is_nested.php',
+        __DIR__ . '/../../Stubs/Formatting/EnsureFunctionsAreOrderedSniff/Fixed/file_where_first_function_is_nested.php',
+    ]
 ]);
 
 it('does not create an error if the order is as expected', function () {

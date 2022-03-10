@@ -17,14 +17,14 @@ final class SquizLabsFixer implements Fixer
     {
     }
 
-    public function getFunctionCalls(): array
+    public function getTopLevelFunctionCalls(): array
     {
         $calls = [];
         $stackPtr = 0;
         $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr);
 
         while ($currentFunctionLocation !== false) {
-            $function = $this->getFunction($currentFunctionLocation);
+            $function = $this->getFunctionCall($currentFunctionLocation);
 
             if ($function !== null) {
                 $calls[] = $function;
@@ -37,7 +37,7 @@ final class SquizLabsFixer implements Fixer
         return $calls;
     }
 
-    private function getFunction(int $ptr): FunctionDetail|null
+    private function getFunctionCall(int $ptr): FunctionDetail|null
     {
         if (!str_contains($this->phpcsFile->getTokensAsString($ptr, 2), '(')) {
             return null;
@@ -50,6 +50,10 @@ final class SquizLabsFixer implements Fixer
         $endOfFunctionPtr = $this->findEndOfFunction($ptr);
 
         if ($endOfFunctionPtr === null) {
+            return null;
+        }
+
+        if ($this->functionCallIsNested($ptr)) {
             return null;
         }
 
@@ -126,5 +130,31 @@ final class SquizLabsFixer implements Fixer
         );
 
         return $currentPtr + 1;
+    }
+
+    /**
+     * Checks whether the function at the given pointer is nested
+     * by counting the previous opening and closing brackets
+     * and retuning whether there are an unequal amount.
+     */
+    private function functionCallIsNested(int $ptr): bool
+    {
+        $openingBracketCount = 0;
+        $closingBracketCount = 0;
+        $currentPtr = $ptr;
+
+        while ($currentPtr !== false) {
+            $currentPtr = $this->phpcsFile->findPrevious([T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET], $currentPtr - 1);
+
+            if ($currentPtr === false) {
+                break;
+            }
+
+            $this->phpcsFile->getTokens()[$currentPtr]['type'] === 'T_OPEN_CURLY_BRACKET'
+                ? $openingBracketCount++
+                : $closingBracketCount++;
+        }
+
+        return $openingBracketCount !== $closingBracketCount;
     }
 }

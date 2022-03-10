@@ -18,7 +18,7 @@ final class EnforceWhitespace
 
     public function __invoke(): void
     {
-        $functions = array_filter($this->fixer->getFunctionCalls(), function (FunctionDetail $function) {
+        $functions = array_filter($this->fixer->getTopLevelFunctionCalls(), function (FunctionDetail $function) {
             return in_array($function->getName(), $this->functionsToEnforceWhitespaceFor);
         });
 

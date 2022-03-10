@@ -13,7 +13,7 @@ interface Fixer
      *
      * @return array<int, FunctionDetail>
      */
-    public function getFunctionCalls(): array;
+    public function getTopLevelFunctionCalls(): array;
 
     /**
      * Add an error with the provided message. Returning true
