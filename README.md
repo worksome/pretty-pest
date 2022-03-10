@@ -28,10 +28,10 @@ You can enable Pretty Pest in [PHPCBF](https://github.com/squizlabs/PHP_CodeSnif
 
 Pretty Pest has 2 sniffs for [PHPCBF](https://github.com/squizlabs/PHP_CodeSniffer):
 
-- `EnsureFunctionsAreOrdered`
-- `NewLineAfterTestSniff`
+- `EnsureTestFunctionsAreOrdered`
+- `NewLineAfterTestFunctions`
 
-### EnsureFunctionsAreOrdered
+### EnsureTestFunctionsAreOrdered
 
 This sniff will ensure that your pest functions are ordered correctly in the test file. By default, we use the following order:
 
@@ -67,7 +67,7 @@ Any functions that are out of order will be moved in the file. Of course, you ca
 </rule>
 ```
 
-### NewLineAfterTest
+### NewLineAfterTestFunctions
 
 This sniff will replace all whitespace after a Pest function with a single new line to ensure that spacing in your test files is consistent.
 

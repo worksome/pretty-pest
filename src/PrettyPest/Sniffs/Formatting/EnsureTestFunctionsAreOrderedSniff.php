@@ -6,19 +6,18 @@ namespace Worksome\PrettyPest\PrettyPest\Sniffs\Formatting;
 
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
-use Worksome\PrettyPest\Actions\EnforceWhitespace;
+use Worksome\PrettyPest\Actions\OrderFunctions;
 use Worksome\PrettyPest\Fixers\SquizLabsFixer;
 
-final class NewLineAfterTestSniff implements Sniff
+final class EnsureTestFunctionsAreOrderedSniff implements Sniff
 {
-    public array $functionsToEnforceWhitespaceFor = [
+    public array $order = [
         'uses',
         'beforeAll',
         'beforeEach',
         'afterEach',
         'afterAll',
-        'test',
-        'it',
+        ['test', 'it'],
         'dataset',
     ];
 
@@ -29,9 +28,6 @@ final class NewLineAfterTestSniff implements Sniff
 
     public function process(File $phpcsFile, $stackPtr): void
     {
-        (new EnforceWhitespace(
-            new SquizLabsFixer($this, $phpcsFile),
-            $this->functionsToEnforceWhitespaceFor
-        ))();
+        (new OrderFunctions(new SquizLabsFixer($this, $phpcsFile), $this->order))();
     }
 }
