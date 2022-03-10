@@ -29,8 +29,8 @@ final class SquizLabsFixer implements Fixer
                 $calls[] = $function;
             }
 
-            $stackPtr = $function === null ? $stackPtr + 1 : $this->phpcsFile->findEndOfStatement($currentFunctionLocation);
-            $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr + 1);
+            $stackPtr = ($function === null ? $stackPtr : $this->phpcsFile->findEndOfStatement($currentFunctionLocation)) + 1;
+            $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr);
         }
 
         return $calls;
@@ -97,5 +97,10 @@ final class SquizLabsFixer implements Fixer
     public function insertContent(string $content, int $ptr): void
     {
         $this->phpcsFile->fixer->addContent($ptr, $content);
+    }
+
+    private function findEndOfFunction(int $ptr): int
+    {
+
     }
 }
