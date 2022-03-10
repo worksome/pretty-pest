@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Worksome\PrettyPest\Fixers;
 
+use InvalidArgumentException;
 use PHP_CodeSniffer\Files\File;
 use PHP_CodeSniffer\Sniffs\Sniff;
 use Worksome\PrettyPest\Contracts\Fixer;
@@ -29,7 +30,7 @@ final class SquizLabsFixer implements Fixer
                 $calls[] = $function;
             }
 
-            $stackPtr = ($function === null ? $stackPtr : $this->phpcsFile->findEndOfStatement($currentFunctionLocation)) + 1;
+            $stackPtr = ($function === null ? $stackPtr : $this->findEndOfFunction($currentFunctionLocation)) + 1;
             $currentFunctionLocation = $this->phpcsFile->findNext(T_STRING, $stackPtr);
         }
 
@@ -38,7 +39,7 @@ final class SquizLabsFixer implements Fixer
 
     private function getFunction(int $ptr): FunctionDetail|null
     {
-        if (! str_contains($this->phpcsFile->getTokensAsString($ptr, 2), '(')) {
+        if (!str_contains($this->phpcsFile->getTokensAsString($ptr, 2), '(')) {
             return null;
         }
 
@@ -46,10 +47,10 @@ final class SquizLabsFixer implements Fixer
             return null;
         }
 
-        $endOfFunctionPtr = $this->phpcsFile->findEndOfStatement($ptr) + 1;
+        $endOfFunctionPtr = $this->findEndOfFunction($ptr);
 
-        $nextTokenThatIsNotWhitespace = $this->phpcsFile->findNext([T_WHITESPACE], $endOfFunctionPtr, exclude: true);
-        $whitespaceDetail = match($nextTokenThatIsNotWhitespace) {
+        $nextTokenThatIsNotWhitespace = $this->phpcsFile->findNext([T_WHITESPACE], $endOfFunctionPtr + 1, exclude: true);
+        $whitespaceDetail = match ($nextTokenThatIsNotWhitespace) {
             false => null,
             default => new WhitespaceDetail($endOfFunctionPtr, $nextTokenThatIsNotWhitespace - 1),
         };
@@ -58,7 +59,7 @@ final class SquizLabsFixer implements Fixer
             $this->phpcsFile->getTokensAsString($ptr, 1),
             $ptr,
             $endOfFunctionPtr,
-            $this->phpcsFile->getTokensAsString($ptr, $endOfFunctionPtr - $ptr),
+            $this->phpcsFile->getTokensAsString($ptr, $endOfFunctionPtr - $ptr + 1),
             $whitespaceDetail,
         );
     }
@@ -70,13 +71,9 @@ final class SquizLabsFixer implements Fixer
 
     public function deleteFunction(FunctionDetail $functionDetail): void
     {
-        $endPtr = $this->phpcsFile->findNext([T_WHITESPACE], $functionDetail->getEndPtr(), exclude: true);
+        $this->deleteFunctionWhitespace($functionDetail);
 
-        if ($endPtr === false) {
-            $endPtr = $functionDetail->getEndPtr();
-        }
-        
-        foreach (range($functionDetail->getStartPtr(), $endPtr) as $ptrToRemove) {
+        foreach (range($functionDetail->getStartPtr(), $functionDetail->getEndPtr()) as $ptrToRemove) {
             $this->phpcsFile->fixer->replaceToken($ptrToRemove, '');
         }
     }
@@ -101,6 +98,25 @@ final class SquizLabsFixer implements Fixer
 
     private function findEndOfFunction(int $ptr): int
     {
+        $openingParenthesisCount = 0;
+        $closingParenthesisCount = 0;
+        $currentPtr = $ptr;
 
+        do {
+            $currentPtr = $this->phpcsFile->findNext([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], $currentPtr + 1);
+
+            if ($currentPtr === false) {
+                throw new InvalidArgumentException("The given ptr [{$ptr}] was not the start of a function call.");
+            }
+
+            $this->phpcsFile->getTokens()[$currentPtr]['type'] === 'T_OPEN_PARENTHESIS'
+                ? $openingParenthesisCount++
+                : $closingParenthesisCount++;
+        } while (
+            $openingParenthesisCount !== $closingParenthesisCount
+            || $this->phpcsFile->getTokens()[$currentPtr + 1]['type'] !== 'T_SEMICOLON'
+        );
+
+        return $currentPtr + 1;
     }
 }

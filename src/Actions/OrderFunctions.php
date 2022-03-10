@@ -45,7 +45,7 @@ final class OrderFunctions
 
         $sortedFunctionContents = implode(
             PHP_EOL . PHP_EOL,
-            array_map(fn (FunctionDetail $detail) => $detail->getContents(), $sortedFunctions),
+            array_map(fn(FunctionDetail $detail) => $detail->getContents(), $sortedFunctions),
         );
 
         $this->fixer->insertContent($sortedFunctionContents, $functions[0]->getStartPtr() - 1);
@@ -55,7 +55,7 @@ final class OrderFunctions
     {
         usort(
             $functions,
-            fn (FunctionDetail $a, FunctionDetail $b) => $this->getFunctionPriority($b) <=> $this->getFunctionPriority($a),
+            fn(FunctionDetail $a, FunctionDetail $b) => $this->getFunctionPriority($b) <=> $this->getFunctionPriority($a),
         );
 
         return $functions;
@@ -84,7 +84,7 @@ final class OrderFunctions
      */
     private function getFunctionOrder(): array
     {
-        return array_map(fn (string|array $order) => (array) $order, $this->functionOrder);
+        return array_map(fn(string|array $order) => (array)$order, $this->functionOrder);
     }
 
 }
