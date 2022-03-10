@@ -42,6 +42,7 @@ This sniff will ensure that your pest functions are ordered correctly in the tes
     'beforeEach',
     'afterEach',
     'afterAll',
+    // The array syntax indicates that `test` and `it` are to be treated as the same function.
     ['test', 'it'],
     'dataset',
 ]
