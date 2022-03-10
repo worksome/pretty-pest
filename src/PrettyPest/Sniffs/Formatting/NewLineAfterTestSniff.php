@@ -11,6 +11,17 @@ use Worksome\PrettyPest\Fixers\SquizLabsFixer;
 
 final class NewLineAfterTestSniff implements Sniff
 {
+    public array $functionsToEnforceWhitespaceFor = [
+        'uses',
+        'beforeAll',
+        'beforeEach',
+        'afterEach',
+        'afterAll',
+        'test',
+        'it',
+        'dataset',
+    ];
+
     public function register(): array
     {
         return [T_OPEN_TAG];
@@ -18,6 +29,9 @@ final class NewLineAfterTestSniff implements Sniff
 
     public function process(File $phpcsFile, $stackPtr): void
     {
-        (new EnforceWhitespace(new SquizLabsFixer($this, $phpcsFile)))();
+        (new EnforceWhitespace(
+            new SquizLabsFixer($this, $phpcsFile),
+            $this->functionsToEnforceWhitespaceFor
+        ))();
     }
 }

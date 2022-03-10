@@ -2,7 +2,7 @@
 
 it('requires new lines between test functions', function () {
     $this->checkFile(__DIR__ . '/../../Stubs/Formatting/NewLineAfterTestSniff/no_spaces_between_tests.php')
-        ->assertHasErrors([5, 8, 22]);
+        ->assertHasErrors([5, 8]);
 });
 
 it('can fix missing new lines correctly', function () {

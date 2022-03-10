@@ -22,6 +22,4 @@ function foo(): bool
     return false;
 }
 var_dump('foo');
-
 var_dump('bar');
-

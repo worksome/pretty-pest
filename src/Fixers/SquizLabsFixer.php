@@ -49,10 +49,14 @@ final class SquizLabsFixer implements Fixer
 
         $endOfFunctionPtr = $this->findEndOfFunction($ptr);
 
+        if ($endOfFunctionPtr === null) {
+            return null;
+        }
+
         $nextTokenThatIsNotWhitespace = $this->phpcsFile->findNext([T_WHITESPACE], $endOfFunctionPtr + 1, exclude: true);
         $whitespaceDetail = match ($nextTokenThatIsNotWhitespace) {
             false => null,
-            default => new WhitespaceDetail($endOfFunctionPtr, $nextTokenThatIsNotWhitespace - 1),
+            default => new WhitespaceDetail($endOfFunctionPtr + 1, $nextTokenThatIsNotWhitespace - 1),
         };
 
         return new FunctionDetail(
@@ -93,10 +97,14 @@ final class SquizLabsFixer implements Fixer
 
     public function insertContent(string $content, int $ptr): void
     {
+        if (! array_key_exists($ptr, $this->phpcsFile->getTokens())) {
+            return;
+        }
+
         $this->phpcsFile->fixer->addContent($ptr, $content);
     }
 
-    private function findEndOfFunction(int $ptr): int
+    private function findEndOfFunction(int $ptr): int|null
     {
         $openingParenthesisCount = 0;
         $closingParenthesisCount = 0;
@@ -106,7 +114,7 @@ final class SquizLabsFixer implements Fixer
             $currentPtr = $this->phpcsFile->findNext([T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS], $currentPtr + 1);
 
             if ($currentPtr === false) {
-                throw new InvalidArgumentException("The given ptr [{$ptr}] was not the start of a function call.");
+                return null;
             }
 
             $this->phpcsFile->getTokens()[$currentPtr]['type'] === 'T_OPEN_PARENTHESIS'

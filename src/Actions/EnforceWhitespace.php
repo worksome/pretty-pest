@@ -9,13 +9,18 @@ use Worksome\PrettyPest\Support\FunctionDetail;
 
 final class EnforceWhitespace
 {
-    public function __construct(private Fixer $fixer)
+    /**
+     * @param array<int, string> $functionsToEnforceWhitespaceFor
+     */
+    public function __construct(private Fixer $fixer, private array $functionsToEnforceWhitespaceFor)
     {
     }
 
     public function __invoke(): void
     {
-        $functions = $this->fixer->getFunctionCalls();
+        $functions = array_filter($this->fixer->getFunctionCalls(), function (FunctionDetail $function) {
+            return in_array($function->getName(), $this->functionsToEnforceWhitespaceFor);
+        });
 
         $shouldFix = false;
 
@@ -41,10 +46,9 @@ final class EnforceWhitespace
             return;
         }
 
-        /** @var FunctionDetail $function */
         foreach ($functions as $function) {
             $this->fixer->deleteFunctionWhitespace($function);
-            $this->fixer->insertContent(PHP_EOL . PHP_EOL, $function->getEndPtr() - 1);
+            $this->fixer->insertContent(PHP_EOL . PHP_EOL, $function->getEndPtr());
         }
     }
 }
