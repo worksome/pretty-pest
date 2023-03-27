@@ -1,4 +1,4 @@
-name: pest
+name: Tests
 
 on:
   push:
@@ -30,7 +30,7 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --ansi
 
       - name: Execute tests
         run: composer test:unit
