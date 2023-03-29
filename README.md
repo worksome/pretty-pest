@@ -2,7 +2,7 @@
 
 Enforce consistent styling for your Pest PHP tests!
 
-[![pest](https://github.com/worksome/pretty-pest/actions/workflows/pest.yml/badge.svg)](https://github.com/worksome/pretty-pest/actions/workflows/pest.yml)
+[![Tests](https://github.com/worksome/pretty-pest/actions/workflows/tests.yml/badge.svg)](https://github.com/worksome/pretty-pest/actions/workflows/tests.yml)
 
 There are lots of important decisions to worry about as a developer. You know what you shouldn't be worrying about?
 The order of your tests! But you still want your tests to look nice, right?
