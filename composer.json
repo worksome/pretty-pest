@@ -27,13 +27,13 @@
     },
     "require": {
         "php": "^8.2",
-        "squizlabs/php_codesniffer": "^3.6",
+        "squizlabs/php_codesniffer": "^3.8.1",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
     },
     "require-dev": {
-        "pestphp/pest": "^2.0"
+        "pestphp/pest": "^2.33"
     },
     "scripts": {
-        "test:unit": "vendor/bin/pest"
+        "test:unit": "vendor/bin/pest -p"
     }
 }
