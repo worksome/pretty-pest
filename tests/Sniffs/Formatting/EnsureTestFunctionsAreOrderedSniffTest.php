@@ -40,9 +40,12 @@ it('can provide a custom sort order', function () {
         __DIR__ . '/../../Stubs/Formatting/EnsureTestFunctionsAreOrderedSniff/dataset_out_of_order.php',
         [
             'order' => [
-                ['uses'],
-                ['dataset'],
-                ['test', 'it'],
+                'scope' => 'sniff',
+                'value' => [
+                    ['uses'],
+                    ['dataset'],
+                    ['test', 'it'],
+                ],
             ],
         ]
     )->assertMatchesFile(__DIR__ . '/../../Stubs/Formatting/EnsureTestFunctionsAreOrderedSniff/Fixed/dataset_out_of_order_with_custom_sort_order.php');
