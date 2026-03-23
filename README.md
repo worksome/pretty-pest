@@ -20,13 +20,13 @@ composer require worksome/pretty-pest --dev
 
 ## PHPCBF
 
-You can enable Pretty Pest in [PHPCBF](https://github.com/squizlabs/PHP_CodeSniffer) by adding the `PrettyPest` rule to your `phpcs.xml` file.
+You can enable Pretty Pest in [PHPCBF](https://github.com/PHPCSStandards/PHP_CodeSniffer) by adding the `PrettyPest` rule to your `phpcs.xml` file.
 
 ```xml
 <rule ref="PrettyPest"/>
 ```
 
-Pretty Pest has 2 sniffs for [PHPCBF](https://github.com/squizlabs/PHP_CodeSniffer):
+Pretty Pest has 2 sniffs for [PHPCBF](https://github.com/PHPCSStandards/PHP_CodeSniffer):
 
 - `EnsureTestFunctionsAreOrdered`
 - `NewLineAfterTestFunctions`
