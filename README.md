@@ -1,5 +1,8 @@
 # Pretty Pest
 
+> [!Note]
+> This project is no longer maintained. Use [the official Pest Rector rules](https://pestphp.com/docs/rector) instead.
+
 Enforce consistent styling for your Pest PHP tests!
 
 [![Tests](https://github.com/worksome/pretty-pest/actions/workflows/tests.yml/badge.svg)](https://github.com/worksome/pretty-pest/actions/workflows/tests.yml)
